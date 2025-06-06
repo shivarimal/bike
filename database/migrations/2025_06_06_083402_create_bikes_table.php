@@ -19,9 +19,10 @@ return new class extends Migration
             $table->string('color');
             $table->string('type');
             $table->string('size');
-            $table->string('price');
-            $table->string('description');
-            $table->string('image');
+            $table->decimal('price', 10, 2);
+            $table->text('description')->nullable();
+            $table->string('image_url')->nullable();
+            $table->enum('status', ['available', 'rented', 'maintenance'])->default('available');
             $table->timestamps();
         });
     }

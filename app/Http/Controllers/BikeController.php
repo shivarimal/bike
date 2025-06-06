@@ -12,7 +12,7 @@ class BikeController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json(Bike::all());
     }
 
     /**
@@ -28,7 +28,21 @@ class BikeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'type' => 'required|string|max:255',
+            'size' =>'required|string|max:255',
+            'brand' =>'required|string|max:255',
+            'model' =>'required|string|max:255',
+            'color' =>'required|string|max:255',
+            'description' => 'nullable|string',
+            'price' => 'required|numeric|min:0',
+         //   'status' => 'string|in:available,rented,maintenance',
+            'image_url' => 'nullable|string|url'
+        ]);
+
+        $bike = Bike::create($validated);
+        return response()->json($bike, 201);
     }
 
     /**
@@ -36,7 +50,7 @@ class BikeController extends Controller
      */
     public function show(Bike $bike)
     {
-        //
+        return response()->json($bike);
     }
 
     /**
@@ -52,7 +66,17 @@ class BikeController extends Controller
      */
     public function update(Request $request, Bike $bike)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'sometimes|required|string|max:255',
+            'type' => 'sometimes|required|string|max:255',
+            'description' => 'nullable|string',
+            'price' => 'sometimes|required|numeric|min:0',
+            'status' => 'sometimes|required|string|in:available,rented,maintenance',
+            'image_url' => 'nullable|string|url'
+        ]);
+
+        $bike->update($validated);
+        return response()->json($bike);
     }
 
     /**
@@ -60,6 +84,7 @@ class BikeController extends Controller
      */
     public function destroy(Bike $bike)
     {
-        //
+        $bike->delete();
+        return response()->json(null, 204);
     }
 }
